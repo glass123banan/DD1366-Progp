@@ -45,7 +45,7 @@ removeNegativeZ rays = filter (\(Vec3 _ _ z) -> z >= 0) rays
 -- It returns a new list of reflected rays with non-negative z-components.
 -- Uses dot-notation to first apply map (reflect normal) on incomingRays and then apply removeNegativeZ
 reflectAndRemoveNegativeZ :: Vec3 -> [Vec3] -> [Vec3]
-reflectAndRemoveNegativeZ normal incomingRays = (removeNegativeZ . map (reflect normal)) incomingRays
+reflectAndRemoveNegativeZ normal incomingRays = (removeNegativeZ . map (\ray -> reflect ray normal)) incomingRays
 
 main :: IO()
 main = do
@@ -72,3 +72,4 @@ main = do
 
     let result8 = reflectAndRemoveNegativeZ (Vec3 1 0 1) [(Vec3 0.2 0.3 1), (Vec3 1 2 3), (Vec3 (-0.2) 0.3 (-0.4))]
     print result8
+

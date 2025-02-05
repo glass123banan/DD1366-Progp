@@ -1,6 +1,8 @@
 -- ASSIGNMENT 1
 
--- 
+-- Main sirSimulate function, call on zip3 to create list of triples
+-- Calls helper functions findSuceptible, findInfected, and findRecovered
+-- For base case, only add initialstate directly in a list as a triple
 sirSimulate :: Double -> Double -> Int -> Int -> (Int, Int, Int) -> [(Int, Int, Int)]
 sirSimulate beta gamma n steps initialState  
     |steps == 0 = [initialState]
@@ -8,7 +10,9 @@ sirSimulate beta gamma n steps initialState
                     (init (findSuceptible beta gamma n steps initialState)) 
                     (init (findInfected beta gamma n steps initialState)) 
                     (init (findRecovered beta gamma n steps initialState))
-    
+
+-- Helper function that creates a list of integers for amount of suceptible
+-- Uses recursion to find previous values and calculates with given formula
 findSuceptible :: Double -> Double -> Int -> Int -> (Int, Int, Int) -> [Int]
 findSuceptible beta gamma n steps (s, i, r)
     |steps == 0 = [s]
@@ -17,7 +21,9 @@ findSuceptible beta gamma n steps (s, i, r)
             prevS = last prevList
             prevI = last (findInfected beta gamma n (steps-1) (s, i, r))
         in prevList ++ [round(fromIntegral prevS - beta * fromIntegral prevS * fromIntegral prevI/fromIntegral n)]
-            
+
+-- Helper function that creates a list of integers for amount of infected
+-- Uses recursion to find previous values and calculates with given formula           
 findInfected :: Double -> Double -> Int -> Int -> (Int, Int, Int) -> [Int]
 findInfected beta gamma n steps (s, i, r)
     |steps == 0 = [i]
@@ -28,6 +34,8 @@ findInfected beta gamma n steps (s, i, r)
             prevR = last (findRecovered beta gamma n (steps-1) (s, i, r))
         in prevList ++ [round(fromIntegral prevI + beta * fromIntegral prevS * fromIntegral prevI/fromIntegral n - gamma * fromIntegral prevI)]
 
+-- Helper function that creates a list of integers for amount of recovered
+-- Uses recursion to find previous values and calculates with given formula   
 findRecovered :: Double -> Double -> Int -> Int -> (Int, Int, Int) -> [Int]
 findRecovered beta gamma n steps (s, i, r)
     |steps == 0 = [r]
