@@ -8,10 +8,11 @@ public class busnumbers {
     static List<String> formattedListOfBuslines = new ArrayList<String>();
     
     // Function that takes string of numbers and returns a list of ints 
-    public static List<Integer> createArraylist (String numbers) {
+    public static List<Integer> changeArraylist (String numbers) {
+        // store each string split by single spaces in numberStrings array
         String[] numberStrings = numbers.split("\s"); // Separate with regex for single spaces
         
-        // Loop the list of strings and convert each element to int and add to int list
+        // Loop the list of strings and convert each element to int and add to global int list
         for (int i = 0; i < numberStrings.length; i++) {
             listOfBuslines.add(Integer.parseInt(numberStrings[i]));
         }
@@ -21,85 +22,66 @@ public class busnumbers {
 
     public static List<String> findConsecutive(List<Integer> inputNumbers) {
         List<String> formattedNumbers = new ArrayList<String>(); // formatted numbers in a stringlist
-        Collections.sort(inputNumbers); // sort for correct output order
+        Collections.sort(inputNumbers); // sort input numbers for correct output order
 
         // loop through the input numbers
-        for (int i = 1; i < inputNumbers.size(); i++) {
-            // Retrieve current number and last number
-            int currentNum = inputNumbers.get(i);
-            int lastNum = inputNumbers.get(i-1);
+        for (int i = 0; i < inputNumbers.size(); i++) {
+            int currentNum = inputNumbers.get(i); // Retrieve current number
+            List<Integer> consecNums = new ArrayList<Integer>(); // List to store consec numbers
+            consecNums.add(currentNum); // add current to consec list
 
-            // check for consecutive (since its already in sorted order)
-            if (currentNum == lastNum + 1) {
-                // List to store consec numbers
-                List<Integer> consecNums = new ArrayList<Integer>();
-
-                // Add current and last num if consecutive
-                consecNums.add(currentNum);
-                consecNums.add(lastNum);
-
-                // Remove duplicates and sort again
-                consecNums = removeDuplicates(consecNums);
-                Collections.sort(consecNums);
-
-                // retrieve first and last num
-                String firstNumCons = String.valueOf(consecNums.get(0));
-                String lastNumCons = String.valueOf(consecNums.get(consecNums.size()-1));
-                String formatted = firstNumCons + "-" + lastNumCons; // Create correct formatted string
-
-                // Add correct formatted string to list
-                formattedNumbers.add(formatted);
+            // while next num is consecutive, keep adding to consecNums
+            while (i+1 < inputNumbers.size() && inputNumbers.get(i+1) == inputNumbers.get(i)+1) {
+                i++;
+                consecNums.add(inputNumbers.get(i));
             }
-            // If not consecutive 
+            // If consecNums has more than 2 elems, its worth it to save space
+            if (consecNums.size() > 2) {
+                String firstNum = String.valueOf(consecNums.get(0)); // stringify first num
+                String lastNum = String.valueOf(consecNums.get(consecNums.size()-1)); // stringify last num
+                String formatted = firstNum + "-" + lastNum; // concat to correct format
+
+                formattedNumbers.add(formatted); // add formatted string to list of formatted nums
+            }
+            // otherwise, add string as single elems
             else {
-                // Create string from input number int and add to list of strings
-                String current = String.valueOf(inputNumbers.get(i));
-                formattedNumbers.add(current);
+                // for each elem in consecNums (1 or 2 elems)
+                for (int num : consecNums) {
+                    String current = String.valueOf(num); // stringify Int
+                    formattedNumbers.add(current); // add to formatted nums
+                }
             }
         }
-        return formattedNumbers;
+        return formattedNumbers; // return list of formatted nums
     }
     
+    // func to print out array in one line
     public static void printBuslines(List<String> inputStrings) {
         for (int i = 0; i < inputStrings.size(); i++) {
             String currentString = inputStrings.get(i);
-            System.out.println(currentString);
+            System.out.print(currentString + " "); // print in one line and spece between
         }
+        System.out.println(); // create newline after printing out all buslines
     }
-
-    // Helper function to remove duplicates from an ArrayList 
-    public static ArrayList<Integer> removeDuplicates(List<Integer> list) 
-    { 
-        // Create a new ArrayList 
-        ArrayList<Integer> newList = new ArrayList<Integer>(); 
-  
-        // Traverse through the first list 
-        for (Integer element : list) { 
-  
-            // If this element is not present in newList 
-            // then add it 
-            if (!newList.contains(element)) { 
-                newList.add(element); 
-            } 
-        } 
-        // return the new list 
-        return newList; 
-    } 
+    
     // Main method for input in terminal
     public static void main(String[] args) {
         // Scanner to read lines from terminal input
         Scanner scanner = new Scanner(System.in);
 
+        // store terminal input in variable input1 (list length)
         String input1 = scanner.nextLine();
-        numberOfBuses = Integer.parseInt(input1);
+        numberOfBuses = Integer.parseInt(input1); // set global variable from 0 to input num
 
-        // Input of list 
-        String input2 = scanner.nextLine();
-        listOfBuslines = createArraylist(input2);
-        formattedListOfBuslines = findConsecutive(listOfBuslines);
+        // store terminal input in variable input2 (list of buslines)
+        String input2 = scanner.nextLine(); 
+        listOfBuslines = changeArraylist(input2); // change value of global list  
+        formattedListOfBuslines = findConsecutive(listOfBuslines); // reformat listOfBuslines with func
 
+        // print in correct way
         printBuslines(formattedListOfBuslines);
 
+        // close scanner
         scanner.close();
     }
 }
