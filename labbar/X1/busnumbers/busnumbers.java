@@ -8,7 +8,7 @@ public class busnumbers {
     static List<String> formattedListOfBuslines = new ArrayList<String>();
     
     // Function that takes string of numbers and returns a list of ints 
-    public static List<Integer> changeArraylist (String numbers) {
+    public static List<Integer> convertToArraylist (String numbers) {
         // store each string split by single spaces in numberStrings array
         String[] numberStrings = numbers.split("\s"); // Separate with regex for single spaces
         
@@ -69,13 +69,13 @@ public class busnumbers {
         // Scanner to read lines from terminal input
         Scanner scanner = new Scanner(System.in);
 
-        // store terminal input in variable input1 (list length)
-        String input1 = scanner.nextLine();
-        numberOfBuses = Integer.parseInt(input1); // set global variable from 0 to input num
+        // store terminal input in variable buslines (list length)
+        String buslines = scanner.nextLine();
+        numberOfBuses = Integer.parseInt(buslines); // set global variable from 0 to input num
 
         // store terminal input in variable input2 (list of buslines)
-        String input2 = scanner.nextLine(); 
-        listOfBuslines = changeArraylist(input2); // change value of global list  
+        String buslist = scanner.nextLine(); 
+        listOfBuslines = convertToArraylist(buslist); // change value of global list  
         formattedListOfBuslines = findConsecutive(listOfBuslines); // reformat listOfBuslines with func
 
         // print in correct way
