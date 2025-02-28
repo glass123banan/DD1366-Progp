@@ -1,3 +1,7 @@
+// Run: 
+//      javac dartscores.java
+//      java dartscores.java
+
 import java.util.*;
 
 public class dartscores {

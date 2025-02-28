@@ -1,3 +1,7 @@
+// Run: 
+//      javac busnumbers.java
+//      java busnumbers.java
+
 package busnumbers;
 
 import java.util.*;

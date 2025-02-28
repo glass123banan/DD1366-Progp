@@ -1,6 +1,10 @@
 % Terminal input: Total dart score
 % Terminal output: A possible combo of dart scores
 
+% Run: 
+%       swipl darscores.pl
+%       ?- main.
+
 % input: total dart score, possible numbers (1-20)
 
 % import kattio file

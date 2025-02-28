@@ -1,5 +1,9 @@
 import Data.List(sort, intercalate)
 
+-- Run: 
+--      ghc busnumbers.hs
+--      ./busnumbers
+
 -- Function that converts the input string into a list of integers instead
 -- words: splits string into list of words
 -- read: casts a string to another type (in this case integer)
