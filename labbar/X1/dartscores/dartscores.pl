@@ -39,11 +39,13 @@ find_combination(TotalScore, [Throw1, Throw2, Throw3]) :-
     Throw2 =.. [Type2, N2], % define second throw
     Throw3 =.. [Type3, N3]. % define third throw
 
-% TODO: fix print format
 % Print result correctly for Kattis
 print_solution([]).
 print_solution([H|T]) :-
-    write_term(H, [quoted(false)]), nl,  % Ensures proper formatting
+    % Extract the type and number from the term (e.g., single(10))
+    H =.. [Type, N], 
+    % Format the output as "Type N" (e.g., "single 10")
+    write(Type), write(' '), write(N), nl,
     print_solution(T).
 
 % main func
