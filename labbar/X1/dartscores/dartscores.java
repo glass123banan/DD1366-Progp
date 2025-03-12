@@ -6,12 +6,12 @@ import java.util.*;
 
 public class dartscores {
     public static void main(String[] args) {
-        // Find user input for total score
+        // retrieve user input for total score
         Scanner scanner = new Scanner(System.in);
         int totalScore = scanner.nextInt();
         scanner.close();
 
-        // Generate all possible throws
+        // Lists for all possible throws
         List<String> throwNames = new ArrayList<>();
         List<Integer> throwValues = new ArrayList<>();
 

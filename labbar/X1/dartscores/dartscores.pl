@@ -11,10 +11,12 @@
 :- [kattio].
 
 % Possible throw values: single, double, triple [1-20]
-throw(single, N, Score) :- between(1, 20, N), Score is N.
+throw(single, N, Score) :- between(1, 20, N), Score is N. % N is a number in the range 1-20
 throw(double, N, Score) :- between(1, 20, N), Score is 2*N.
 throw(triple, N, Score) :- between(1, 20, N), Score is 3*N.
 
+% univ(=..): likes(john, mary)=..X => X = [likes, john, mary]
+%            X =.. [likes, john, mary] => X = likes(john, mary)
 % find combination for 1 throw
 find_combination(TotalScore, [Throw1]) :-
     throw(Type1, N1, Score1), % set score1 to N1 (1-3 multiplied with 1-20) and unknown type (single, double, triple)
@@ -43,7 +45,7 @@ find_combination(TotalScore, [Throw1, Throw2, Throw3]) :-
 print_solution([]).
 print_solution([H|T]) :-
     % Extract the type and number from the term (e.g., single(10))
-    H =.. [Type, N], 
+    H =.. [Type, N], % format -> Type(N) instead of [Type, N]
     % Format the output as "Type N" (e.g., "single 10")
     write(Type), write(' '), write(N), nl,
     print_solution(T).
