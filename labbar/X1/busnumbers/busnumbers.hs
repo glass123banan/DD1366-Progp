@@ -43,7 +43,11 @@ main = do
 
     -- list of buslines
     buslist <- getLine
-    let getList = groupConsecutive (convertToArraylist buslist)
-    let formattedList = createString getList
 
-    putStrLn formattedList
+    if read buslines == length (words buslist)
+        then do
+            let getList = groupConsecutive (convertToArraylist buslist)
+            let formattedList = createString getList
+            putStrLn formattedList
+        else 
+            putStrLn "Not right amount of buslines!"

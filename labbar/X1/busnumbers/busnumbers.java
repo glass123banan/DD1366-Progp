@@ -80,10 +80,15 @@ public class busnumbers {
         // store terminal input in variable input2 (list of buslines)
         String buslist = scanner.nextLine(); 
         listOfBuslines = convertToArraylist(buslist); // change value of global list  
-        formattedListOfBuslines = findConsecutive(listOfBuslines); // reformat listOfBuslines with func
 
-        // print in correct way
-        printBuslines(formattedListOfBuslines);
+        if (numberOfBuses == listOfBuslines.size()) {
+            formattedListOfBuslines = findConsecutive(listOfBuslines); // reformat listOfBuslines with func
+             // print in correct way
+            printBuslines(formattedListOfBuslines);
+        }
+        else {
+            System.out.println("Not right amount of buslines!");
+        }
 
         // close scanner
         scanner.close();
