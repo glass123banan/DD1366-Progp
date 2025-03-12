@@ -32,7 +32,7 @@ createString sortedBuslines = unwords (map go sortedBuslines)
     where
         go :: [Int] -> String
         go innerlist
-            | length innerlist > 2 = show (head innerlist) ++ "-" ++ show (last innerlist)
+            | length innerlist > 2 = show (head innerlist) ++ "-" ++ show (last innerlist) 
             | otherwise = unwords (map show innerlist)
 
 -- mainfunc to read from terminal
