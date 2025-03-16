@@ -1,3 +1,7 @@
+// RUN FILE: 
+//          rustc bernoulli.rs
+//          ./bernoulli
+
 // Function for binomial
 fn binom(n: u16, k: u16) -> f64{
     let mut r = 1.0;
@@ -9,6 +13,7 @@ fn binom(n: u16, k: u16) -> f64{
     return r;
 }
 
+// mut -> gör att variabeln är muteable och kan ändras
 fn B(n: u16) -> f64 {
     let mut b: Vec<f64> = vec![0.0; (n + 1) as usize]; // Create a vector to store B values
     
@@ -26,8 +31,8 @@ fn B(n: u16) -> f64 {
 }
 
 fn main() {
-    let test = binom(5, 2);
-    println!("{}", test);
+    // let test = binom(5, 2);
+    // println!("{}", test);
 
     let bernoulli = B(4); 
     println!("B(4) = {}", bernoulli);
