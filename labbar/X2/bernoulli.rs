@@ -1,4 +1,4 @@
-// RUN FILE: 
+// COMPILE & RUN FILE: 
 //          rustc bernoulli.rs
 //          ./bernoulli
 
@@ -34,6 +34,6 @@ fn main() {
     // let test = binom(5, 2);
     // println!("{}", test);
 
-    let bernoulli = B(4); 
+    let bernoulli = B(1); 
     println!("B(4) = {}", bernoulli);
 }
