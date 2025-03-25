@@ -30,7 +30,7 @@
     // echo binom(5, 2);
     // echo "\n";
 
-    $res = B(6);
+    $res = B(4); // output = -0.033333... = -1/30
     echo "B(1) = ";
     echo $res;
     echo "\n";

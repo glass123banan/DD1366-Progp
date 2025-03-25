@@ -1,8 +1,9 @@
 ;; RUN FILE:
 ;;           clojure bernoulli.clj
 
+; Func for binom which takes parameters n and k
 (defn binom [n k]
-  (let [r (atom 1)]
+  (let [r (atom 1.0)] ; define r = 1 as atom (muteable)
     ; loop in range 1 to k inclusive
     (doseq [i (range 1 (inc k))]
       ; swap changes atom-value with func value
@@ -10,48 +11,20 @@
     @r) ; @r dereferences variable r and returns r
 )
 
-;; (defn B [n]
-;;   (let [B (make-array Float/TYPE n)]
-;;   (aset B 0 (atom 1)) ; set B[0] = 1
-;;   (doseq [m (range 1 (inc n))]
-;;     (aset B m (atom 0)) 
-;;     (doseq [k (range 0 (inc (- m 1)))]
-;;       (swap! (aget B m) (fn [current] (- current (* (binom (+ m 1) k) (aget B k)))))
-;;       )
-;;     (swap! (aget B m) (fn [current] (/ current (+ m 1))))
-;;     )
-;;   (swap! (aget B (dec n)) identity)  ;; Dereference the atom and return the value
-;;     @(aget B (dec n))))
-
-;; (defn B [n]
-;;   (let [B (make-array Float/TYPE n)]
-;;     (aset B 0 1)
-;;     (doseq [m (range 1 (inc n))]
-;;       (aset B m 0) ; set B[m] = 0
-;;       (doseq [k (range 0 (inc (- m 1)))]
-;;         (aset B m ( (fn [current] (- current (* (binom (+ m 1) k) (aget B k))))))
-;;       )
-;;       (aset B m (fn [current] (/ current (+ m 1))))
-;;     ) 
-;;     (aget B n)
-;;   )
-;; )
-
+; func that takes in n and returns the bernoulli number
 (defn B [n]
-  (let [B (atom (vec (repeat n 0)))] ; allocate B[0]..B[n-1] = zeros
-    (swap! B assoc 0 1) ; B[0] = 1
-    (doseq [m (range 1 (inc n))] ; 1..n
-      (swap! B assoc m 0) ; B[m] = 0
-      (doseq [k (range m)] ; 0..(m-1)
-        (swap! B #(assoc % m  ; B[m] = ...
-                         (-
-                          (get % m) ; B[m]
-                          (*
-                           (binom (inc m) k)
-                           (get % k)))))) ; B[k]
-      (swap! B update m ; B[m] = B[m] ...
-             #(/ % (inc m))))
-    (get @B n)))
+  (let [B (atom (vec (repeat n 1)))] ; muteable vector B
+    ; loop m from 1 to n
+    (doseq [m (range 1 (inc n))] 
+      (swap! B assoc m 0.0) ; B[m] = 0
+      ; loop k from 0 to m-1 (not inc)
+      (doseq [k (range 0 m)]
+        (swap! B (fn [x] (assoc x m (- (get x m) (* (binom (inc m) k) (get x k)))))) ; calculate
+        )
+      (swap! B update m (fn [x] (/ (double x) (+ 1 m)))) ; divide with m+1
+      )
+    (get @B n)) ; retrieve output
+  )
 
 (println (binom 5 2))
-(println (B 1))
+(println (B 4)) ; should return -0.03333... = (-1/30)
