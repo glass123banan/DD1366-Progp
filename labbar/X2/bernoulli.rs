@@ -34,6 +34,12 @@ fn main() {
     // let test = binom(5, 2);
     // println!("{}", test);
 
-    let bernoulli = B(1); 
-    println!("B(4) = {}", bernoulli);
+    // let bernoulli = B(1); 
+    // println!("B(4) = {}", bernoulli);
+
+    // print first 10 bernoulli numbers
+    for n in 0..10 {
+        let nr = B(n);
+        println!("B({}) = {}", n, nr);
+    }
 }

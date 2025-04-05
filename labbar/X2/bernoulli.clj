@@ -13,9 +13,10 @@
 
 ; func that takes in n and returns the bernoulli number
 (defn B [n]
-  (let [B (atom (vec (repeat n 1)))] ; muteable vector B
+  (let [B (atom (vec (repeat (inc n) 0.0)))] ; muteable vector B
+    (swap! B assoc 0 1.0) ; set first element to 1
     ; loop m from 1 to n
-    (doseq [m (range 1 (inc n))] 
+    (doseq [m (range 1 (inc n))]
       (swap! B assoc m 0.0) ; B[m] = 0
       ; loop k from 0 to m-1 (not inc)
       (doseq [k (range 0 m)]
@@ -26,5 +27,8 @@
     (get @B n)) ; retrieve output
   )
 
-(println (binom 5 2))
-(println (B 4)) ; should return -0.03333... = (-1/30)
+;; (println (binom 5 2))
+;; (println (B 4)) ; should return -0.03333... = (-1/30)
+
+(doseq [n (range 10)]
+  (println (str "B(" n ") = " (B n))))

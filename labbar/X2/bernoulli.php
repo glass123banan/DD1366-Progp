@@ -30,8 +30,14 @@
     // echo binom(5, 2);
     // echo "\n";
 
-    $res = B(4); // output = -0.033333... = -1/30
-    echo "B(1) = ";
-    echo $res;
-    echo "\n";
+    // $res = B(4); // output = -0.033333... = -1/30
+    // echo "B(1) = ";
+    // echo $res;
+    // echo "\n";
+
+    // Loop to print the first 10 Bernoulli numbers
+    for ($n = 0; $n < 10; $n++) {
+        $res = B($n);
+        echo "B($n) = $res\n";
+    }
 ?>
