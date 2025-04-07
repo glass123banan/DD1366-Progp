@@ -33,6 +33,9 @@ binom := [:n :k |
 printB := [
     0 to: 9 do: [:i |
         Transcript 
+            show: 'B(';
+            show: i asString;
+            show: ') = ';
             show: (b value: i) asString; 
             cr.
     ].
