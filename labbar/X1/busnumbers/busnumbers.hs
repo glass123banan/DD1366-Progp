@@ -28,7 +28,7 @@ groupConsecutive xs = go (sort xs) []
 
 -- function that takes the grouped list of ints and creates a string with correct format
 createString :: [[Int]] -> String
-createString sortedBuslines = unwords (map go sortedBuslines)
+createString sortedBuslines = unwords (map go sortedBuslines) -- creates a string with whitespaces
     where
         go :: [Int] -> String
         go innerlist
@@ -46,8 +46,8 @@ main = do
 
     if read buslines == length (words buslist)
         then do
-            let getList = groupConsecutive (convertToArraylist buslist)
-            let formattedList = createString getList
-            putStrLn formattedList
+            let getList = groupConsecutive (convertToArraylist buslist) -- sorted list
+            let formattedList = createString getList -- format list with createString
+            putStrLn formattedList -- print
         else 
             putStrLn "Not right amount of buslines!"

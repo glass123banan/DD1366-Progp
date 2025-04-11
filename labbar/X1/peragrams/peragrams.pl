@@ -14,6 +14,7 @@ countLetterFreq(String, Counts) :-
     ).
 
 % helper func to count letter freq
+% takes sorted list as input 
 countChars([], _, 0).
 countChars([CharH | CharT], Letter, Counter) :-
     countChars(CharT, Letter, SubCount), 

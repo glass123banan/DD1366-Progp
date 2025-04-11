@@ -22,7 +22,7 @@
       ; loop k from 0 to m-1 (m not inclusive)
       (doseq [k (range 0 m)]
         ; swap updates the vector stored in B
-        ; fn for x=B performs assoc on vector x=B and stores the calculation at index m
+        ; fn for x=B performs assoc on vector x=B and stores the calculation at index m 
         (swap! B (fn [x] (assoc x m (- (get x m) (* (binom (inc m) k) (get x k)))))) ; calculate
         )
       ; update -> modify value (assoc = change value entirely)

@@ -1,0 +1,56 @@
+# Formell grammatik för Leona
+
+Tokens för commandon: 
+- FORW
+- BACK
+- LEFT
+- RIGHT
+- DOWN
+- UP
+- COLOR
+- REP
+
+Tokens for annat: 
+- PERIOD
+- QUOTE
+- DECIMAL
+- HEX
+- ERROR
+
+Grammatik: 
+
+PROGRAM ::= <COMMAND> | <REP_COMMAND>
+
+<COMMAND> ::= <FORW> | <BACK> | <LEFT> | <RIGHT> | 
+              <DOWN> | <UP>   | <COLOR>| <REP> 
+             
+<FORW> ::= "FORW " <INTEGER><PERIOD>
+<BACK> ::= "BACK " <INTEGER><PERIOD>
+<LEFT> ::= "LEFT " <INTEGER><PERIOD>
+<RIGHT> ::= "RIGHT " <INTEGER><PERIOD>
+<DOWN> ::= "DOWN" <PERIOD>
+<UP> ::= "UP" <PERIOD>
+<COLOR> ::= "COLOR " <HEX><PERIOD>
+
+<REP> ::= "REP " <INTEGER> " " <REPS><PERIOD>
+<REPS> ::= <COMMAND> | <QUOTE><COMMAND><QUOTE>| <QUOTE><REPS><COMMAND><QUOTE>
+
+<PERIOD> ::= "."
+<QUOTE> ::= "'"
+
+<digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+
+<DECIMAL> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+<INTEGER> ::= <DECIMAL> | <INTEGER><DECIMAL>
+
+<LETTER> ::= A | B | C | D | E | F | 
+             a | b | c | d | e | f 
+
+<HEX-CHAR> ::= <DECIMAL> | <LETTER>
+
+<HEX> ::= "#" <HEX-CHAR> <HEX-CHAR> <HEX-CHAR> 
+              <HEX-CHAR> <HEX-CHAR> <HEX-CHAR>
+
+<COMMENT> ::= "%" <EVERYTHING>
+<ERROR> ::= <Allting utanför grammatiken>    

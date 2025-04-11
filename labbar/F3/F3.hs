@@ -103,6 +103,7 @@ render state scr = do
   drawPlayer scr (p2 state) -- ritar ut spelare 2 
   refresh -- uppdaterar terminalen med informationen från window (uppdaterar terminalen)
 
+-- Rita en ram runt spelplanen, oxå MONADER!!!!! :D
 drawBorder :: GameState -> Window -> IO ()
 drawBorder state scr = do
   let w = boardWidth state -- hämta bredden och höjden från GameState
@@ -164,7 +165,7 @@ gameLoop state scr = do
       -- kalla på sig själv för att fortsätta spelet
       gameLoop state2 scr
   where
-    waitForEsc scr = do
+     scr = do
       ch <- getch -- hämta input
       let intCh = fromIntegral ch :: Int -- gör om input till int
       if intCh == 27  -- ESC key 
@@ -184,3 +185,4 @@ main = do
   render initialState scr
   gameLoop initialState scr
   endWin -- städar upp och stänger fönster
+  waitForEsc
