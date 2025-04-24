@@ -3,6 +3,8 @@ import re
 import math
 from enum import Enum
 
+sys.setrecursionlimit(10000)
+
 class TokenType(Enum):
     DOWN = 'DOWN'
     LEFT = 'LEFT'
@@ -201,15 +203,12 @@ class Parser:
         t = self.lexer.peek_token()
         if t.type == expected_type:
             return self.lexer.next_token()
-        # elif t.type == TokenType.INVALID:
-        #     # Fallback to last valid row if needed
-        #     raise SyntaxError(f"Syntaxfel på rad {t.row}")
+        elif t.type == TokenType.INVALID:
+            # Fallback to last valid row if needed
+            raise SyntaxError(f"Syntaxfel på rad {t.row}")
         else:
-            #raise SyntaxError(f"Syntaxfel på rad {self.last_row}")
             error_row = self.last_row if t.type == TokenType.EOF else t.row
             raise SyntaxError(f"Syntaxfel på rad {error_row}")
-
-
 
     def parse(self):
         tree = self.expr()
@@ -259,36 +258,47 @@ class Parser:
             return ColorNode(color_token.data)
         elif t.type == TokenType.REP:
             repeats_token = self.expect_token(TokenType.NUM)
-            next_t = self.lexer.peek_token()
-            if next_t.type == TokenType.QUOTE:
-                quote_token = self.consume_token()  # Consume opening QUOTE
-                # subtree = self.expr()
-                # try:
-                #     closing_quote = self.expect_token(TokenType.QUOTE)
-                # except SyntaxError as e:
-                #     raise SyntaxError(e)
-                # return RepeatNode(repeats_token.data, subtree)
-                subtree = self.quoted_expr(quote_token.row)
+            
+            if self.check_quote(repeats_token.row):
+                self.consume_token()            # consume the opening QUOTE
+                
+                # checka att quote följs direkt av commando
+                if self.lexer.peek_token().type not in {TokenType.FORW, TokenType.BACK,
+                                                    TokenType.LEFT, TokenType.RIGHT, 
+                                                    TokenType.DOWN, TokenType.UP, TokenType.COLOR, 
+                                                    TokenType.REP}:
+                    raise SyntaxError(f"Syntaxfel på rad {self.lexer.peek_token().row}")
+                subtree = self.expr()          # parse everything up to next non-instruction
+                
+                # check last row if quotation is closed 
+                # if not self.check_quote(self.last_row):
+                #     # if it wasn’t a QUOTE, throw with the right row
+                #     raise SyntaxError(f"Syntaxfel på rad {self.last_row} rep2")
+                
+                next_token = self.lexer.peek_token()
+                if next_token.type == TokenType.INVALID:
+                    raise SyntaxError(f"Syntaxfel på rad {next_token.row}")
+                
+                if next_token.type != TokenType.QUOTE:
+                    raise SyntaxError(f"Syntaxfel på rad {self.last_row}")
+
+                self.consume_token()            # consume the closing QUOTE
                 return RepeatNode(repeats_token.data, subtree)
             else:
-                subtree = self.instruction() # not quoted
+                # no quotes → single instruction
+                subtree = self.instruction()
                 return RepeatNode(repeats_token.data, subtree)
+
     
-    ## new func for handling quotes        
-    def quoted_expr(self, opening_row):
-        instructions = []
-        while True:
-            next_t = self.lexer.peek_token()
-            if next_t.type == TokenType.QUOTE:
-                self.lexer.next_token()  # Consume closing QUOTE
-                break
-            elif next_t.type == TokenType.EOF:
-                raise SyntaxError(f"Syntaxfel på rad {opening_row}: Missing closing QUOTE")
-            elif next_t.type in {TokenType.FORW, TokenType.DOWN, TokenType.REP}:
-                instructions.append(self.instruction())
-            else:
-                raise SyntaxError(f"Syntaxfel på rad {next_t.row}: Unexpected token in quoted block")
-        return ExprNode(instructions)
+    ## new method
+    def check_quote(self, last_row):
+        t = self.lexer.peek_token()
+        if t.type == TokenType.QUOTE:
+            return True
+        elif t.type == TokenType.EOF:
+            # exactly like Java’s chkQuote: throw on EOF
+            raise SyntaxError(f"Syntaxfel på rad {last_row}")
+        return False
 
 # Leonardo class for turtle graphics state and operations
 class Leonardo:
