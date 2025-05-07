@@ -1,3 +1,9 @@
+/* Uppgift 2: Från rutiner till funktioner och icke-statiska metoder
+ * Implementera en funktion double_sum i Java, PHP eller Python som tar 
+ * in en lista av heltal och returnerar summan av talen multiplicerat med 2. 
+ * Det är inte tillåtet att använda inbyggda funktioner eller biblioteksfunktioner 
+ * som sum för att lösa uppgiften.
+ */
 public class uppg2 {
     /* Function that takes an inputlist and returns the sum 
      * of the list multiplied by 2
@@ -15,7 +21,7 @@ public class uppg2 {
 
     /* Main func */
     public static void main(String[] args) {
-        int[] testLst = {1, 2, 3}; // test list
+        int[] testLst = {}; // test list
         System.out.println(double_sum(testLst)); // print answer 
     }
 }
