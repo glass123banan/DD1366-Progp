@@ -9,8 +9,10 @@
                | DOWN DOT
                | UP DOT
                | COLOR HEX DOT
-               | REP NUM QUOTE <expr> QUOTE
-               | REP NUM <expr>
+               | REP NUM <rep>
+            
+<rep> ::= QUOTE <expr> QUOTE | <instruction>
+
 
 NUM: [0-9]+
 DOT: .
