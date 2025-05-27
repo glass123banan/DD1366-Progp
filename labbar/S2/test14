@@ -1,5 +1,5 @@
 % testfall med nestlade reps med citattecken
-REP  5 "
+REP  5 ""
     REP 5 "
         REP 1 "
             DOWN.
