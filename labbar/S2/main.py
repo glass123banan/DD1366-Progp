@@ -348,7 +348,7 @@ def process_text(text):
         print(e)
         return #                                                                               🐢 🐢
     except Exception as e:
-        print(f"Syntaxfel på rad {parser.last_row}")
+        print(f"Syntaxfel på rad {parser.last_row}") #                                       🐢    🐢 
         return #                                                                               🐢 🐢
 
 if __name__ == '__main__':
