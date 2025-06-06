@@ -1,7 +1,8 @@
 <?php
 session_start();
+// om ej inloggad eller inte är på login eller create account sidan
 if (!isset($_SESSION['user_id']) && !in_array(basename($_SERVER['PHP_SELF']), ['login.php', 'create_account.php'])) {
-    header('Location: login.php');
+    header('Location: login.php'); // skicka till login
     exit;
 }
 ?>

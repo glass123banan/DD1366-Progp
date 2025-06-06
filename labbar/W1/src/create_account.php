@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: login.php');
         exit;
     } catch (PDOException $e) {
-        if ($e->getCode() == '23505') { // unique violation
+        if ($e->getCode() == '23505') { // error kod för samma användarnamn -> unique violation
             $error = 'Username already exists';
         } else {
             $error = 'Error creating account';
@@ -31,4 +31,4 @@ include 'header.php';
     <label>Password: <input type="password" name="password" required></label><br>
     <button type="submit">Create Account</button>
 </form>
-<?php include 'footer.php'; ?>
+ 

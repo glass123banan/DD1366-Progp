@@ -5,7 +5,7 @@ $user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-        if (isset($_POST['add_product'])) {
+        if (isset($_POST['add_product'])) { 
             $name = trim($_POST['name']);
             if (empty($name)) {
                 throw new Exception('Product name cannot be empty.');
@@ -91,4 +91,4 @@ include 'header.php';
 
 <p><a href="shopping_list.php">← Back to Shopping List</a></p>
 
-<?php include 'footer.php'; ?>
+ 
