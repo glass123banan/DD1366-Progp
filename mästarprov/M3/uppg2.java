@@ -11,7 +11,7 @@ public class uppg2 {
      * Parameters: int[] inputList = list with numbers that should be summed up
      * Return: 2*sum = double of the sum of the list
      */
-    private static int double_sum(int[] inputList) {
+    public int doubleSum(int[] inputList) {
         int sum = 0;
         for(int elem : inputList) {
             sum+=elem;
@@ -21,7 +21,8 @@ public class uppg2 {
 
     /* Main func */
     public static void main(String[] args) {
-        int[] testLst = {}; // test list
-        System.out.println(double_sum(testLst)); // print answer 
+        uppg2 u = new uppg2();
+        int[] testLst = {1,2,3,4,5}; // test list
+        System.out.println(u.doubleSum(testLst)); // print answer 
     }
 }

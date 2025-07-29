@@ -10,6 +10,17 @@ if (isset($_GET['success'])) {
 
 // Function to get purchase frequency estimate for a product
 function getPurchaseFrequency($pdo, $user_id, $product_id) {
+    // First check if there are at least 2 purchases -> how many purchase of specific id
+    $count_stmt = $pdo->prepare('SELECT COUNT(*) as purchase_count FROM Purchases WHERE user_id = ? AND product_id = ?');
+    $count_stmt->execute([$user_id, $product_id]);
+    $count_result = $count_stmt->fetch();
+    
+    // return no pattern if only bought 1 or 0 times
+    if ($count_result['purchase_count'] < 2) {
+        return "No pattern yet";
+    }
+    // retrieve diff between two latest purchases 
+    // if null, set as 0 instead
     $stmt = $pdo->prepare('
         WITH intervals AS (
             SELECT (pu.purchase_date - LAG(pu.purchase_date) OVER (ORDER BY pu.purchase_date))::int AS interval
@@ -26,20 +37,23 @@ function getPurchaseFrequency($pdo, $user_id, $product_id) {
     if (!$result || $result['avg_interval'] === null) {
         return "No pattern yet";
     }
-    
+
+    // set res as variable
     $avg_interval = $result['avg_interval'];
     
     if ($avg_interval < 7) {
         return "~" . round($avg_interval) . " days";
-    } elseif ($avg_interval < 30) {
-        return "~" . round($avg_interval / 7) . " weeks";
-    } else {
-        return "~" . round($avg_interval / 30) . " months";
+    } elseif ($avg_interval < 30) { // mer än en vecka men mindre än en månad
+        return "~" . round($avg_interval / 7) . " weeks"; // dela med 7 för veckor
+    } else { // om ännu mer än en månad
+        return "~" . round($avg_interval / 30) . " months"; // dela på 30 för antal månader
     }
 }
 
 // Function to get next suggested date
 function getNextSuggestedDate($pdo, $user_id, $product_id) {
+    // samma intervall logik, välj absolut senaste köpdatum
+    // next_suggested är senaste köpdatum plus intervallet som räknats ut -> nästa datum
     $stmt = $pdo->prepare('
         WITH intervals AS (
             SELECT (pu.purchase_date - LAG(pu.purchase_date) OVER (ORDER BY pu.purchase_date))::int AS interval
@@ -63,15 +77,18 @@ function getNextSuggestedDate($pdo, $user_id, $product_id) {
     ');
     $stmt->execute([$user_id, $product_id, $user_id, $product_id]);
     $result = $stmt->fetch();
-    
+
+    // om det finns resultat
     if ($result && $result['next_suggested']) {
-        $next_date = new DateTime($result['next_suggested']);
-        $today = new DateTime();
-        $diff = $today->diff($next_date);
+        $next_date = new DateTime($result['next_suggested']); // plocka nästa datum
+        $today = new DateTime(); // plocka dagens datum
+        $diff = $today->diff($next_date); // skillnad mellan idag och nästa datum
         
+        // om idag
         if ($next_date <= $today) {
             return "Due now";
         } else {
+            // diff ->days plockar ut i datumformat
             if ($diff->days < 7) {
                 return "in " . $diff->days . " days";
             } elseif ($diff->days < 30) {
@@ -98,6 +115,10 @@ function getSuggestedProducts($pdo, $user_id) {
         $frequency = getPurchaseFrequency($pdo, $user_id, $product['id']);
         $next_suggested = getNextSuggestedDate($pdo, $user_id, $product['id']);
         
+        if ($frequency === "No pattern yet"){
+            continue;
+        }
+
         // Suggest if never bought or if due now
         if ($next_suggested === "Due now") {
             $suggested_products[] = $product;
@@ -115,7 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         error_log("POST data: " . print_r($_POST, true));
         
         // Check if there's already an unconfirmed shopping list
-        // prepare + execute -> no sql injections 💉
         $stmt = $pdo->prepare('SELECT id FROM ShoppingLists WHERE user_id = ? AND confirmed_at IS NULL');
         $stmt->execute([$user_id]);
         $existing = $stmt->fetch();
@@ -298,5 +318,3 @@ function deselectAll() {
 </script>
 
 <p><a href="products.php">Manage Products</a></p>
-
- 

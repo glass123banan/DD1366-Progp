@@ -12,7 +12,6 @@
 {-# HLINT ignore "Use max" #-}
 
 returnLargestInt :: [Integer] -> Integer
-returnLargestInt [] = error "empty list"
 returnLargestInt [x] = x
 returnLargestInt (x:xs) =
     (\a b -> if a > b then a else b) x (returnLargestInt xs)
